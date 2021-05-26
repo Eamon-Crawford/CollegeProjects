@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="requestObjectsTests.ModulePutRequestTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-06T14:31:54" hostname="DESKTOP-5QF4TQS" time="0.002">
+  <properties/>
+  <testcase name="testToModuleObject()" classname="requestObjectsTests.ModulePutRequestTest" time="0.002"/>
+  <system-out><![CDATA[2021-05-06 15:31:54.502 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering <error "io.mockk.MockKException: No other calls allowed in stdObjectAnswer than equals/hashCode/toString"> on class java.util.UUID.randomUUID()
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

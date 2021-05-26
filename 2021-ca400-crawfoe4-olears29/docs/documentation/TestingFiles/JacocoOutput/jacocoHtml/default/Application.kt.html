@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Application.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Application.kt</span></div><h1>Application.kt</h1><pre class="source lang-java linenums">
+import dao.LectureDao
+import dao.ModuleDao
+import dao.StudentUserDao
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.jackson.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import org.jetbrains.exposed.sql.Database
+import org.joda.time.DateTimeZone
+import routes.lectureRouting
+import routes.modulesRouting
+import routes.userRouting
+
+<span class="fc" id="L17">private val database = Database.connect(&quot;jdbc:postgresql://localhost:5432/project_db&quot;, driver = &quot;org.postgresql.Driver&quot;,</span>
+<span class="fc" id="L18">    user = &quot;postgres&quot;, password = &quot;postMondo360&quot;)</span>
+<span class="fc" id="L19">val LectureDaoInstance = LectureDao(database)</span>
+<span class="fc" id="L20">val ModuleDaoInstance = ModuleDao(database)</span>
+<span class="fc" id="L21">val StudentUserDaoInstance = StudentUserDao(database)</span>
+
+
+
+fun main(testing: Boolean) {
+<span class="nc" id="L26">    DateTimeZone.setDefault(DateTimeZone.forID(&quot;Europe/Dublin&quot;))</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">    val port = System.getenv(&quot;PORT&quot;)?.toInt() ?: 23567</span>
+<span class="nc" id="L28">    embeddedServer(Netty, port) {</span>
+<span class="nc" id="L29">        StudentUserDaoInstance.init()</span>
+<span class="nc" id="L30">        LectureDaoInstance.init()</span>
+<span class="nc" id="L31">        ModuleDaoInstance.init()</span>
+<span class="nc" id="L32">        install(CallLogging)</span>
+<span class="nc" id="L33">        install(ContentNegotiation) {</span>
+<span class="nc" id="L34">            jackson {}</span>
+<span class="nc" id="L35">        }</span>
+<span class="nc" id="L36">        routing {</span>
+<span class="nc" id="L37">            lectureRouting()</span>
+<span class="nc" id="L38">            userRouting()</span>
+<span class="nc" id="L39">            modulesRouting()</span>
+
+<span class="nc" id="L41">        }</span>
+<span class="nc" id="L42">    }.start(wait = true)</span>
+<span class="nc" id="L43">}</span>
+
+@Suppress(&quot;unused&quot;) // Referenced in application.conf
+@JvmOverloads
+fun Application.module() {
+
+<span class="nc" id="L49">}</span>
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

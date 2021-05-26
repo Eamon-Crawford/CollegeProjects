@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NFC Reader</string>
+    <string name="sign_in_system">Sign In System</string>
+    <string name="change_registered_location">Change Registered Location</string>
+    <string name="please_choose_a_mode">Please choose a mode</string>
+    <string name="please_tap_this_device_with_your_student_card">Please tap this device with your Student Card</string>
+    <string name="the_current_room_code_is">The current room code is:</string>
+    <string name="please_enter_the_current_room_code_n_gla_l101_spd_c206">Please enter the current room code\n ( GLA.L101, SPD.C206 )</string>
+    <string name="enter_room_code_gla_l101">Enter Room Code (GLA.L101)</string>
+    <string name="submit">Submit</string>
+    <string name="change_room">Change Room</string>
+    <string name="welcome">Welcome to %1$s</string>
+</resources>

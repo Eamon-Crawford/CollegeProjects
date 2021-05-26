@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="requestObjectsTests.LectureRequestTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-06T14:31:54" hostname="DESKTOP-5QF4TQS" time="0.3">
+  <properties/>
+  <testcase name="testToLectureObject()" classname="requestObjectsTests.LectureRequestTest" time="0.3"/>
+  <system-out><![CDATA[2021-05-06 15:31:54.201 [Test worker] DEBUG i.m.i.i.JvmStaticMockFactory - Creating static mockk for UUID
+2021-05-06 15:31:54.202 [Test worker] TRACE i.m.i.i.JvmStaticMockFactory - Building static proxy for UUID hashcode=25f30f35
+2021-05-06 15:31:54.203 [Test worker] DEBUG io.mockk.proxy.jvm.StaticProxyMaker - Transforming class java.util.UUID for static method interception
+2021-05-06 15:31:54.203 [Test worker] TRACE i.m.p.j.t.JvmInlineInstrumentation - Retransforming [Ljava.lang.Class;@fd0d3ae
+2021-05-06 15:31:54.250 [Test worker] TRACE i.m.i.recording.CommonCallRecorder - Starting stubbing
+2021-05-06 15:31:54.386 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for UUID hashcode=25f30f35
+2021-05-06 15:31:54.386 [Test worker] TRACE i.m.p.j.t.JvmInlineInstrumentation - Retransforming [Ljava.lang.Class;@728e9bba
+2021-05-06 15:31:54.484 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class java.util.UUID itself because it is final.
+2021-05-06 15:31:54.485 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class java.util.UUID via instantiator
+2021-05-06 15:31:54.485 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class java.util.UUID
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Matcher map: {}
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Processing call #0: randomUUID()
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Built matcher: class java.util.UUID.randomUUID())
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Child search key: class java.util.UUID.randomUUID())
+2021-05-06 15:31:54.487 [Test worker] DEBUG i.m.i.i.AbstractMockFactory - Creating mockk for UUID name=child of static UUID#6
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for UUID hashcode=25f30f35
+2021-05-06 15:31:54.487 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class java.util.UUID itself because it is final.
+2021-05-06 15:31:54.487 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class java.util.UUID via instantiator
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class java.util.UUID
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Mocked permanently: class java.util.UUID.randomUUID()
+2021-05-06 15:31:54.487 [Test worker] TRACE i.m.i.r.s.StubbingAwaitingAnswerState - Done stubbing. Still accepting additional answers
+2021-05-06 15:31:54.488 [Test worker] DEBUG io.mockk.impl.stub.CommonClearer - Clearing [ModuleDaoUtils(object ModuleDaoUtils)] mocks ClearOptions(answers=true, recordedCalls=true, childMocks=true, verificationMarks=true, exclusionRules=true)
+2021-05-06 15:31:54.491 [Test worker] TRACE i.m.i.recording.CommonCallRecorder - Starting stubbing
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Matcher map: {[7dd790d2c246d805]=any()}
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Processing call #0: getExpectedAttendanceNumber(String)
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Signature for 0 argument of getExpectedAttendanceNumber(String): [7dd790d2c246d805]
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Built matcher: ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendanceNumber(any()))
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Mocked permanently: ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendanceNumber(any())
+2021-05-06 15:31:54.492 [Test worker] TRACE i.m.i.r.s.StubbingAwaitingAnswerState - Done stubbing. Still accepting additional answers
+2021-05-06 15:31:54.493 [Test worker] TRACE i.m.i.recording.CommonCallRecorder - Starting stubbing
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Matcher map: {[-547767bf73522d98]=any()}
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Processing call #0: getExpectedAttendance(String)
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Signature for 0 argument of getExpectedAttendance(String): [-547767bf73522d98]
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Built matcher: ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendance(any()))
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Mocked permanently: ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendance(any())
+2021-05-06 15:31:54.494 [Test worker] TRACE i.m.i.r.s.StubbingAwaitingAnswerState - Done stubbing. Still accepting additional answers
+2021-05-06 15:31:54.497 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering <error "io.mockk.MockKException: No other calls allowed in stdObjectAnswer than equals/hashCode/toString"> on class java.util.UUID.randomUUID()
+2021-05-06 15:31:54.498 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering 4 on ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendanceNumber(CA4004)
+2021-05-06 15:31:54.499 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering [11231231, 21231232, 31231233, 41231234] on ModuleDaoUtils(object ModuleDaoUtils).getExpectedAttendance(CA4004)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

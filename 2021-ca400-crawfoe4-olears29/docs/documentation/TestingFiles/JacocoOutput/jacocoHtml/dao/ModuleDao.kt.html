@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModuleDao.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">ModuleDao.kt</span></div><h1>ModuleDao.kt</h1><pre class="source lang-java linenums">package dao
+
+import StudentUserDaoInstance
+import daoUtils.LectureDaoUtils.listToString
+import daoUtils.LectureDaoUtils.stringToList
+import dataClasses.Module
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import table.ModuleTable
+import java.io.Closeable
+import java.util.*
+
+<span class="fc" id="L13">class ModuleDao(private val db: Database) : ModuleDAOInterface {</span>
+
+<span class="fc" id="L15">    override fun init() = transaction(db) {</span>
+<span class="fc" id="L16">        SchemaUtils.create(ModuleTable)</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    override fun createModule(module : Module) = transaction(db){</span>
+<span class="fc" id="L20">        val studentIdsString = listToString(module.regStudentIds)// kotlin exposed doesn't support array types even though postgresql does, removing [ ] from string</span>
+<span class="fc" id="L21">        ModuleTable.insert {</span>
+<span class="fc" id="L22">            it[uuid] = module.uuid</span>
+<span class="fc" id="L23">            it[moduleCode] = module.moduleCode</span>
+<span class="fc" id="L24">            it[moduleTitle] = module.moduleTitle</span>
+<span class="fc" id="L25">            it[regStudentIds] = studentIdsString</span>
+<span class="fc" id="L26">            it[expectedAttendanceNumber] = module.regStudentIds.size</span>
+<span class="fc" id="L27">        }</span>
+<span class="fc" id="L28">        Unit</span>
+<span class="fc" id="L29">    }</span>
+
+<span class="fc" id="L31">    override fun updateModule(module: Module) = transaction(db){</span>
+<span class="fc" id="L32">        val studentIdsString = listToString(module.regStudentIds)// kotlin exposed doesn't support array types even though postgresql does, removing [ ] from string</span>
+<span class="fc" id="L33">        ModuleTable.update({ ModuleTable.uuid eq module.uuid }) {</span>
+<span class="fc" id="L34">            it[moduleCode] = module.moduleCode</span>
+<span class="fc" id="L35">            it[moduleTitle] = module.moduleTitle</span>
+<span class="fc" id="L36">            it[regStudentIds] = studentIdsString</span>
+<span class="fc" id="L37">            it[expectedAttendanceNumber] = module.regStudentIds.size</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">        Unit</span>
+<span class="fc" id="L40">    }</span>
+
+<span class="fc" id="L42">    override fun deleteModule(uuid: UUID) = transaction(db){</span>
+<span class="fc" id="L43">        ModuleTable.deleteWhere { ModuleTable.uuid eq uuid }</span>
+<span class="fc" id="L44">        Unit</span>
+<span class="fc" id="L45">    }</span>
+
+<span class="fc" id="L47">    override fun getModule(uuid: UUID): Module? = transaction(db){</span>
+<span class="fc" id="L48">        ModuleTable.select { ModuleTable.uuid eq uuid }.map{</span>
+<span class="fc" id="L49">            Module(</span>
+<span class="fc" id="L50">                it[ModuleTable.uuid],</span>
+<span class="fc" id="L51">                it[ModuleTable.moduleCode],</span>
+<span class="fc" id="L52">                it[ModuleTable.moduleTitle],</span>
+<span class="fc" id="L53">                stringToList(it[ModuleTable.regStudentIds]),</span>
+<span class="fc" id="L54">                it[ModuleTable.expectedAttendanceNumber]</span>
+            )
+<span class="fc" id="L56">        }.singleOrNull()</span>
+<span class="fc" id="L57">    }</span>
+
+<span class="fc" id="L59">    override fun getModule(moduleCode : String): Module? = transaction(db){</span>
+<span class="fc" id="L60">        ModuleTable.select { ModuleTable.moduleCode eq moduleCode }.map{</span>
+<span class="fc" id="L61">            Module(</span>
+<span class="fc" id="L62">                it[ModuleTable.uuid],</span>
+<span class="fc" id="L63">                it[ModuleTable.moduleCode],</span>
+<span class="fc" id="L64">                it[ModuleTable.moduleTitle],</span>
+<span class="fc" id="L65">                stringToList(it[ModuleTable.regStudentIds]),</span>
+<span class="fc" id="L66">                it[ModuleTable.expectedAttendanceNumber]</span>
+            )
+<span class="fc" id="L68">        }.singleOrNull()</span>
+<span class="fc" id="L69">    }</span>
+
+<span class="fc" id="L71">    override fun getAllModules(): List&lt;Module&gt; = transaction(db){</span>
+<span class="fc" id="L72">        ModuleTable.selectAll().map {</span>
+<span class="fc" id="L73">            Module(</span>
+<span class="fc" id="L74">                it[ModuleTable.uuid],</span>
+<span class="fc" id="L75">                it[ModuleTable.moduleCode],</span>
+<span class="fc" id="L76">                it[ModuleTable.moduleTitle],</span>
+<span class="fc" id="L77">                stringToList(it[ModuleTable.regStudentIds]),</span>
+<span class="fc" id="L78">                it[ModuleTable.expectedAttendanceNumber]</span>
+            )
+<span class="fc" id="L80">        }.toList()</span>
+<span class="fc" id="L81">    }</span>
+
+<span class="fc" id="L83">    override fun regStudentForModule(givenModuleCode: String, studentId: String) = transaction(db){</span>
+<span class="fc" id="L84">        val module = getModule(givenModuleCode)</span>
+<span class="fc bfc" id="L85" title="All 4 branches covered.">        if (module != null &amp;&amp; !module.regStudentIds.contains(studentId)) {</span>
+
+<span class="fc" id="L87">            val mutableRegStudentsList : MutableList&lt;String&gt; = module.regStudentIds as MutableList&lt;String&gt;</span>
+<span class="fc" id="L88">            mutableRegStudentsList.add(studentId)</span>
+<span class="fc" id="L89">            val studentIdsString = listToString(mutableRegStudentsList)</span>
+
+<span class="fc" id="L91">            ModuleTable.update({ ModuleTable.uuid eq module.uuid }) {</span>
+<span class="fc" id="L92">                it[moduleCode] = module.moduleCode</span>
+<span class="fc" id="L93">                it[moduleTitle] = module.moduleTitle</span>
+<span class="fc" id="L94">                it[regStudentIds] = studentIdsString</span>
+<span class="fc" id="L95">                it[expectedAttendanceNumber] = module.regStudentIds.size</span>
+<span class="fc" id="L96">            }</span>
+
+<span class="fc" id="L98">            val student = StudentUserDaoInstance.getStudentUser(studentId)</span>
+<span class="pc bpc" id="L99" title="4 of 6 branches missed.">            if (student?.moduleCodes?.contains(givenModuleCode) == false) {</span>
+<span class="nc" id="L100">                StudentUserDaoInstance.addModuleToStudent(givenModuleCode, student.uuid)</span>
+            }
+<span class="pc bpc" id="L102" title="1 of 6 branches missed.">        }else if(module?.regStudentIds?.contains(studentId) == true) {</span>
+<span class="fc" id="L103">            throw Exception(&quot;Student already registered&quot;)</span>
+        } else {
+<span class="fc" id="L105">            throw Exception(&quot;Module Not Found: Student wasn't registered&quot;)</span>
+        }
+<span class="fc" id="L107">    }</span>
+
+<span class="nc" id="L109">    override fun close() {}</span>
+}
+
+interface ModuleDAOInterface : Closeable {
+    fun init()
+    fun createModule(module : Module)
+    fun updateModule(module: Module)
+    fun deleteModule(uuid: UUID)
+    fun getModule(uuid: UUID) : Module?
+    fun getModule(moduleCode: String) : Module?
+    fun getAllModules() : List&lt;Module&gt;
+    fun regStudentForModule(givenModuleCode: String, studentId: String)
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

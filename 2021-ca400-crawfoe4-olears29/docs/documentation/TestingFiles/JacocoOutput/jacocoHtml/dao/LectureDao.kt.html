@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LectureDao.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">LectureDao.kt</span></div><h1>LectureDao.kt</h1><pre class="source lang-java linenums">package dao
+
+import daoUtils.LectureDaoUtils.getNextLecture
+import daoUtils.LectureDaoUtils.listToString
+import daoUtils.LectureDaoUtils.stringToList
+import daoUtils.ModuleDaoUtils.getExpectedAttendance
+import dataClasses.Lecture
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
+import table.LectureTable
+import java.io.Closeable
+import java.util.*
+
+
+<span class="fc" id="L16">class LectureDao(private val db: Database) : LectureDAOInterface {</span>
+
+<span class="fc" id="L18">    override fun init() = transaction(db) {</span>
+<span class="fc" id="L19">        SchemaUtils.create(LectureTable)</span>
+<span class="fc" id="L20">    }</span>
+
+<span class="fc" id="L22">    override fun createLecture(lecture: Lecture) = transaction(db){</span>
+<span class="fc" id="L23">        val expectedAttendanceList = getExpectedAttendance(lecture.moduleCode)</span>
+
+<span class="fc" id="L25">        LectureTable.insert {</span>
+<span class="fc" id="L26">            it[uuid] = lecture.uuid</span>
+<span class="fc" id="L27">            it[courseCode] = lecture.courseCode</span>
+<span class="fc" id="L28">            it[moduleCode] = lecture.moduleCode</span>
+<span class="fc" id="L29">            it[date] = lecture.date</span>
+<span class="fc" id="L30">            it[endTime] = lecture.endTime</span>
+<span class="fc" id="L31">            it[location] = lecture.location</span>
+<span class="fc" id="L32">            it[type] = lecture.type</span>
+<span class="fc" id="L33">            it[expectedAttendanceNumber] = expectedAttendanceList.size</span>
+<span class="fc" id="L34">            it[actualAttendanceNumber] = 0</span>
+<span class="fc" id="L35">            it[expectedAttendance] = listToString(expectedAttendanceList)</span>
+<span class="fc" id="L36">            it[actualAttendance] = &quot;&quot;</span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">        Unit</span>
+<span class="fc" id="L39">    }</span>
+
+<span class="fc" id="L41">    override fun updateLecture(lecture: Lecture) = transaction(db){</span>
+<span class="fc" id="L42">        LectureTable.update({ LectureTable.uuid eq lecture.uuid }) {</span>
+<span class="fc" id="L43">            it[courseCode] = lecture.courseCode</span>
+<span class="fc" id="L44">            it[moduleCode] = lecture.moduleCode</span>
+<span class="fc" id="L45">            it[date] = lecture.date</span>
+<span class="fc" id="L46">            it[endTime] = lecture.endTime</span>
+<span class="fc" id="L47">            it[location] = lecture.location</span>
+<span class="fc" id="L48">            it[type] = lecture.type</span>
+<span class="fc" id="L49">            it[expectedAttendanceNumber] = lecture.expectedAttendanceNumber</span>
+<span class="fc" id="L50">            it[actualAttendanceNumber] = lecture.actualAttendanceNumber</span>
+<span class="fc" id="L51">            it[expectedAttendance] = listToString(lecture.expectedAttendance)</span>
+<span class="fc" id="L52">            it[actualAttendance] = listToString(lecture.actualAttendance)</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">        Unit</span>
+<span class="fc" id="L55">    }</span>
+
+<span class="fc" id="L57">    override fun deleteLecture(uuid: UUID) = transaction(db){</span>
+<span class="fc" id="L58">        LectureTable.deleteWhere { LectureTable.uuid eq uuid }</span>
+<span class="fc" id="L59">        Unit</span>
+<span class="fc" id="L60">    }</span>
+
+<span class="fc" id="L62">    override fun getLecture(uuid: UUID): Lecture? = transaction(db){</span>
+<span class="fc" id="L63">        LectureTable.select { LectureTable.uuid eq uuid }.map{</span>
+<span class="fc" id="L64">            Lecture(</span>
+<span class="fc" id="L65">                it[LectureTable.uuid],</span>
+<span class="fc" id="L66">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L67">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L68">                it[LectureTable.date],</span>
+<span class="fc" id="L69">                it[LectureTable.endTime],</span>
+<span class="fc" id="L70">                it[LectureTable.location],</span>
+<span class="fc" id="L71">                it[LectureTable.type],</span>
+<span class="fc" id="L72">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L73">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L74">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L75">                stringToList(it[LectureTable.actualAttendance])</span>
+
+            )
+<span class="fc" id="L78">        }.singleOrNull()</span>
+<span class="fc" id="L79">    }</span>
+
+<span class="fc" id="L81">    override fun getAllModuleLectures(moduleCode: String): List&lt;Lecture&gt; = transaction(db){</span>
+<span class="fc" id="L82">        LectureTable.select { LectureTable.moduleCode eq moduleCode }.map{</span>
+<span class="fc" id="L83">            Lecture(</span>
+<span class="fc" id="L84">                it[LectureTable.uuid],</span>
+<span class="fc" id="L85">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L86">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L87">                it[LectureTable.date],</span>
+<span class="fc" id="L88">                it[LectureTable.endTime],</span>
+<span class="fc" id="L89">                it[LectureTable.location],</span>
+<span class="fc" id="L90">                it[LectureTable.type],</span>
+<span class="fc" id="L91">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L92">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L93">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L94">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+<span class="fc" id="L96">        }.sortedBy { it.date}</span>
+<span class="fc" id="L97">    }</span>
+
+<span class="fc" id="L99">    override fun getAllCourseLectures(courseCode: String): List&lt;Lecture&gt; = transaction(db){</span>
+<span class="fc" id="L100">        LectureTable.select { LectureTable.courseCode eq courseCode }.map{</span>
+<span class="fc" id="L101">            Lecture(</span>
+<span class="fc" id="L102">                it[LectureTable.uuid],</span>
+<span class="fc" id="L103">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L104">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L105">                it[LectureTable.date],</span>
+<span class="fc" id="L106">                it[LectureTable.endTime],</span>
+<span class="fc" id="L107">                it[LectureTable.location],</span>
+<span class="fc" id="L108">                it[LectureTable.type],</span>
+<span class="fc" id="L109">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L110">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L111">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L112">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+<span class="fc" id="L114">        }.sortedBy { it.date}</span>
+<span class="fc" id="L115">    }</span>
+
+<span class="fc" id="L117">    override fun getAllLectures(): List&lt;Lecture&gt; = transaction(db){</span>
+<span class="fc" id="L118">        LectureTable.selectAll().map{</span>
+<span class="fc" id="L119">            Lecture(</span>
+<span class="fc" id="L120">                it[LectureTable.uuid],</span>
+<span class="fc" id="L121">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L122">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L123">                it[LectureTable.date],</span>
+<span class="fc" id="L124">                it[LectureTable.endTime],</span>
+<span class="fc" id="L125">                it[LectureTable.location],</span>
+<span class="fc" id="L126">                it[LectureTable.type],</span>
+<span class="fc" id="L127">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L128">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L129">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L130">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+<span class="fc" id="L132">        }.sortedBy { it.date}</span>
+<span class="fc" id="L133">    }</span>
+
+<span class="fc" id="L135">    override fun getNextLectureForModule(moduleCode: String): Lecture? = transaction(db){</span>
+<span class="fc" id="L136">        val lectureList = LectureTable.select { LectureTable.moduleCode eq moduleCode }.map{</span>
+<span class="fc" id="L137">            Lecture(</span>
+<span class="fc" id="L138">                it[LectureTable.uuid],</span>
+<span class="fc" id="L139">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L140">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L141">                it[LectureTable.date],</span>
+<span class="fc" id="L142">                it[LectureTable.endTime],</span>
+<span class="fc" id="L143">                it[LectureTable.location],</span>
+<span class="fc" id="L144">                it[LectureTable.type],</span>
+<span class="fc" id="L145">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L146">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L147">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L148">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+        }
+
+<span class="fc" id="L152">        return@transaction getNextLecture(lectureList)</span>
+<span class="fc" id="L153">    }</span>
+
+<span class="fc" id="L155">    override fun getNextLectureForCourse(courseCode: String): Lecture? = transaction(db){</span>
+<span class="fc" id="L156">        val lectureList = LectureTable.select { LectureTable.courseCode eq courseCode }.map{</span>
+<span class="fc" id="L157">            Lecture(</span>
+<span class="fc" id="L158">                it[LectureTable.uuid],</span>
+<span class="fc" id="L159">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L160">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L161">                it[LectureTable.date],</span>
+<span class="fc" id="L162">                it[LectureTable.endTime],</span>
+<span class="fc" id="L163">                it[LectureTable.location],</span>
+<span class="fc" id="L164">                it[LectureTable.type],</span>
+<span class="fc" id="L165">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L166">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L167">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L168">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+        }
+
+<span class="fc" id="L172">        return@transaction getNextLecture(lectureList)</span>
+<span class="fc" id="L173">    }</span>
+<span class="fc" id="L174">    override fun getAllLecturesAtLocation(location: String): List&lt;Lecture&gt; = transaction(db){</span>
+<span class="fc" id="L175">       LectureTable.select { LectureTable.location eq location }.map{</span>
+<span class="fc" id="L176">            Lecture(</span>
+<span class="fc" id="L177">                it[LectureTable.uuid],</span>
+<span class="fc" id="L178">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L179">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L180">                it[LectureTable.date],</span>
+<span class="fc" id="L181">                it[LectureTable.endTime],</span>
+<span class="fc" id="L182">                it[LectureTable.location],</span>
+<span class="fc" id="L183">                it[LectureTable.type],</span>
+<span class="fc" id="L184">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L185">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L186">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L187">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+<span class="fc" id="L189">        }.sortedBy { it.date}</span>
+<span class="fc" id="L190">    }</span>
+<span class="fc" id="L191">    override fun getLectureWithLocationAtNow(location: String): List&lt;Lecture&gt; = transaction(db){</span>
+<span class="fc" id="L192">        val lectureList: List&lt;Lecture&gt; = LectureTable.select { LectureTable.location eq location }.map{</span>
+<span class="fc" id="L193">            Lecture(</span>
+<span class="fc" id="L194">                it[LectureTable.uuid],</span>
+<span class="fc" id="L195">                it[LectureTable.courseCode],</span>
+<span class="fc" id="L196">                it[LectureTable.moduleCode],</span>
+<span class="fc" id="L197">                it[LectureTable.date],</span>
+<span class="fc" id="L198">                it[LectureTable.endTime],</span>
+<span class="fc" id="L199">                it[LectureTable.location],</span>
+<span class="fc" id="L200">                it[LectureTable.type],</span>
+<span class="fc" id="L201">                it[LectureTable.expectedAttendanceNumber],</span>
+<span class="fc" id="L202">                it[LectureTable.actualAttendanceNumber],</span>
+<span class="fc" id="L203">                stringToList(it[LectureTable.expectedAttendance]),</span>
+<span class="fc" id="L204">                stringToList(it[LectureTable.actualAttendance])</span>
+            )
+        }
+<span class="fc" id="L207">        val response = mutableListOf&lt;Lecture&gt;()</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for(lecture in lectureList) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            if (lecture.date.minusMinutes(15).isBefore(DateTime.now())</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                &amp;&amp; lecture.endTime.isAfter(DateTime.now())) {</span>
+<span class="fc" id="L211">                response.add(lecture)</span>
+            }
+        }
+<span class="fc" id="L214">        return@transaction response</span>
+<span class="fc" id="L215">    }</span>
+
+<span class="fc" id="L217">    override fun updateLectureAttendance(uuid: UUID, attendanceList: List&lt;String&gt;) = transaction(db){</span>
+<span class="fc" id="L218">        LectureTable.update({ LectureTable.uuid eq uuid }) {</span>
+<span class="fc" id="L219">            it[actualAttendanceNumber] = attendanceList.size</span>
+<span class="fc" id="L220">            it[actualAttendance] = listToString(attendanceList)</span>
+<span class="fc" id="L221">        }</span>
+<span class="fc" id="L222">        Unit</span>
+<span class="fc" id="L223">    }</span>
+
+<span class="nc" id="L225">    override fun close() {}</span>
+}
+
+interface LectureDAOInterface : Closeable {
+    fun init()
+    fun createLecture(lecture: Lecture)
+    fun updateLecture(lecture: Lecture)
+    fun deleteLecture(uuid: UUID)
+    fun getLecture(uuid: UUID) : Lecture?
+    fun getAllModuleLectures(moduleCode: String): List&lt;Lecture&gt;
+    fun getAllCourseLectures(courseCode: String): List&lt;Lecture&gt;
+    fun getAllLectures() : List&lt;Lecture&gt;
+    fun getNextLectureForModule(moduleCode: String): Lecture?
+    fun getNextLectureForCourse(courseCode: String): Lecture?
+    fun getAllLecturesAtLocation(location: String): List&lt;Lecture&gt;
+    fun getLectureWithLocationAtNow(location: String): List&lt;Lecture&gt;
+    fun updateLectureAttendance(uuid: UUID, attendanceList: List&lt;String&gt;)
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
