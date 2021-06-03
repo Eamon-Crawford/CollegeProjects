@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="daoUtilsTest.ModuleDaoUtilsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-05-06T14:31:54" hostname="DESKTOP-5QF4TQS" time="0.121">
+  <properties/>
+  <testcase name="testGetExpectedAttendanceNumber()" classname="daoUtilsTest.ModuleDaoUtilsTest" time="0.114"/>
+  <testcase name="testGetExpectedAttendance()" classname="daoUtilsTest.ModuleDaoUtilsTest" time="0.006"/>
+  <system-out><![CDATA[2021-05-06 15:31:54.017 [Test worker] DEBUG i.m.i.i.JvmStaticMockFactory - Creating object mockk for ModuleDao
+2021-05-06 15:31:54.017 [Test worker] TRACE i.m.i.i.JvmStaticMockFactory - Building object proxy for ModuleDao hashcode=3a14b6af
+2021-05-06 15:31:54.017 [Test worker] TRACE i.m.p.j.t.JvmInlineInstrumentation - Retransforming [Ljava.lang.Class;@390f38dc
+2021-05-06 15:31:54.072 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class dao.ModuleDao itself because it is final.
+2021-05-06 15:31:54.072 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Attaching to object mock for class dao.ModuleDao
+2021-05-06 15:31:54.073 [Test worker] DEBUG io.mockk.impl.stub.CommonClearer - Clearing [ModuleDao(object ModuleDao)] mocks ClearOptions(answers=true, recordedCalls=true, childMocks=true, verificationMarks=true, exclusionRules=true)
+2021-05-06 15:31:54.076 [Test worker] TRACE i.m.i.recording.CommonCallRecorder - Starting stubbing
+2021-05-06 15:31:54.085 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for Module hashcode=18add842
+2021-05-06 15:31:54.086 [Test worker] TRACE i.m.p.j.t.JvmInlineInstrumentation - Retransforming [Ljava.lang.Class;@a8db45
+2021-05-06 15:31:54.126 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class dataClasses.Module itself because it is final.
+2021-05-06 15:31:54.126 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class dataClasses.Module via instantiator
+2021-05-06 15:31:54.126 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class dataClasses.Module
+2021-05-06 15:31:54.129 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Matcher map: {}
+2021-05-06 15:31:54.129 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Processing call #0: getModule(String)
+2021-05-06 15:31:54.129 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Signature for 0 argument of getModule(String): [CA4004]
+2021-05-06 15:31:54.129 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Built matcher: ModuleDao(object ModuleDao).getModule(eq(CA4004)))
+2021-05-06 15:31:54.130 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Child search key: ModuleDao(object ModuleDao).getModule(eq(CA4004)))
+2021-05-06 15:31:54.130 [Test worker] DEBUG i.m.i.i.AbstractMockFactory - Creating mockk for Module name=child of object ModuleDao#4
+2021-05-06 15:31:54.130 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for Module hashcode=18add842
+2021-05-06 15:31:54.130 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class dataClasses.Module itself because it is final.
+2021-05-06 15:31:54.130 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class dataClasses.Module via instantiator
+2021-05-06 15:31:54.130 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class dataClasses.Module
+2021-05-06 15:31:54.130 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Mocked permanently: ModuleDao(object ModuleDao).getModule(eq(CA4004))
+2021-05-06 15:31:54.130 [Test worker] TRACE i.m.i.r.s.StubbingAwaitingAnswerState - Done stubbing. Still accepting additional answers
+2021-05-06 15:31:54.131 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering Module(uuid=038bc7f6-9e2b-44d4-b3dd-71595dfd90f0, moduleCode=CA4004, moduleTitle=Soft. Eng.:Process,Principles & Methods, regStudentIds=[11231231, 21231232, 31231233, 41231234], expectedAttendanceNumber=4) on ModuleDao(object ModuleDao).getModule(CA4004)
+2021-05-06 15:31:54.132 [Test worker] DEBUG io.mockk.impl.stub.CommonClearer - Clearing [ModuleDao(object ModuleDao)] mocks ClearOptions(answers=true, recordedCalls=true, childMocks=true, verificationMarks=true, exclusionRules=true)
+2021-05-06 15:31:54.135 [Test worker] TRACE i.m.i.recording.CommonCallRecorder - Starting stubbing
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for Module hashcode=18add842
+2021-05-06 15:31:54.136 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class dataClasses.Module itself because it is final.
+2021-05-06 15:31:54.136 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class dataClasses.Module via instantiator
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class dataClasses.Module
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Matcher map: {}
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Processing call #0: getModule(String)
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Signature for 0 argument of getModule(String): [CA4004]
+2021-05-06 15:31:54.136 [Test worker] TRACE i.m.i.r.SignatureMatcherDetector - Built matcher: ModuleDao(object ModuleDao).getModule(eq(CA4004)))
+2021-05-06 15:31:54.137 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Child search key: ModuleDao(object ModuleDao).getModule(eq(CA4004)))
+2021-05-06 15:31:54.137 [Test worker] DEBUG i.m.i.i.AbstractMockFactory - Creating mockk for Module name=child of object ModuleDao#5
+2021-05-06 15:31:54.137 [Test worker] TRACE i.m.i.i.AbstractMockFactory - Building proxy for Module hashcode=18add842
+2021-05-06 15:31:54.137 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Taking instance of class dataClasses.Module itself because it is final.
+2021-05-06 15:31:54.137 [Test worker] TRACE io.mockk.proxy.jvm.ProxyMaker - Instantiating proxy for class dataClasses.Module via instantiator
+2021-05-06 15:31:54.137 [Test worker] TRACE i.m.proxy.jvm.ObjenesisInstantiator - Creating new empty instance of class dataClasses.Module
+2021-05-06 15:31:54.137 [Test worker] TRACE i.m.impl.recording.PermanentMocker - Mocked permanently: ModuleDao(object ModuleDao).getModule(eq(CA4004))
+2021-05-06 15:31:54.137 [Test worker] TRACE i.m.i.r.s.StubbingAwaitingAnswerState - Done stubbing. Still accepting additional answers
+2021-05-06 15:31:54.137 [Test worker] DEBUG i.m.i.r.states.AnsweringState - Answering Module(uuid=bd0e4d72-5e74-45a7-aee0-a04b39ef0743, moduleCode=CA4004, moduleTitle=Soft. Eng.:Process,Principles & Methods, regStudentIds=[11231231, 21231232, 31231233, 41231234], expectedAttendanceNumber=4) on ModuleDao(object ModuleDao).getModule(CA4004)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

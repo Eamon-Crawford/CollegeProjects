@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserRoutes.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">routes</a> &gt; <span class="el_source">UserRoutes.kt</span></div><h1>UserRoutes.kt</h1><pre class="source lang-java linenums">package routes
+
+import LectureDaoInstance
+import ModuleDaoInstance
+import StudentUserDaoInstance
+import dataClasses.Lecture
+import dataClasses.StudentUser
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import org.joda.time.DateTime
+import requestObjects.StudentUserRequest
+import requestObjects.toStudentUserObject
+import java.util.*
+
+fun Route.userRouting() {
+<span class="nc" id="L19">    route(&quot;/users&quot;) {</span>
+<span class="nc bnc" id="L20" title="All 3 branches missed.">        get {</span>
+<span class="nc" id="L21">            call.respond(mapOf(&quot;users&quot; to StudentUserDaoInstance.getAllStudentUsers()))</span>
+<span class="nc" id="L22">        }</span>
+
+<span class="nc bnc" id="L24" title="All 5 branches missed.">        post {</span>
+<span class="nc" id="L25">            try {</span>
+<span class="nc" id="L26">                val user = call.receive&lt;StudentUserRequest&gt;()</span>
+<span class="nc" id="L27">                val studentUserObject = user.toStudentUserObject()</span>
+<span class="nc" id="L28">                StudentUserDaoInstance.createStudentUser(studentUserObject)</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">                for (module in studentUserObject.moduleCodes) {</span>
+<span class="nc" id="L30">                    ModuleDaoInstance.regStudentForModule(module, studentUserObject.studentId)</span>
+                }
+<span class="nc" id="L32">                call.respond(200)</span>
+<span class="nc" id="L33">            } catch(e: Exception) {</span>
+<span class="nc" id="L34">                println(e)</span>
+<span class="nc" id="L35">                call.respond(HttpStatusCode.BadRequest, e.toString())</span>
+            }
+<span class="nc" id="L37">        }</span>
+
+<span class="nc bnc" id="L39" title="All 4 branches missed.">        put {</span>
+<span class="nc" id="L40">            val studentUser = call.receive&lt;StudentUser&gt;()</span>
+<span class="nc" id="L41">            StudentUserDaoInstance.updateStudentUser(studentUser)</span>
+<span class="nc" id="L42">            call.respond(200)</span>
+<span class="nc" id="L43">        }</span>
+
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        delete(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L46">            val strUuid: String? = call.parameters[&quot;uuid&quot;]</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (strUuid != null) {</span>
+<span class="nc" id="L48">                val uuid: UUID = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc" id="L49">                StudentUserDaoInstance.deleteStudentUser(uuid)</span>
+<span class="nc" id="L50">                call.respond(200)</span>
+            } else {
+<span class="nc" id="L52">                call.respond(404)</span>
+            }
+<span class="nc" id="L54">        }</span>
+
+<span class="nc bnc" id="L56" title="All 4 branches missed.">        get(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L57">            val uuid = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (uuid != null) {</span>
+<span class="nc" id="L59">                val response = StudentUserDaoInstance.getStudentUser(uuid)</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L61">                    call.respond(response)</span>
+<span class="nc" id="L62">                else call.respond(&quot;No such user found!&quot;)</span>
+            }
+<span class="nc" id="L64">        }</span>
+
+<span class="nc bnc" id="L66" title="All 4 branches missed.">        get(&quot;/student/{studentId}&quot;) {</span>
+<span class="nc" id="L67">            val studentId  = call.parameters[&quot;studentId&quot;]</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (studentId != null) {</span>
+<span class="nc" id="L69">                val response = StudentUserDaoInstance.getStudentUser(studentId)</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L71">                    call.respond(response)</span>
+<span class="nc" id="L72">                else call.respond(&quot;No such user found!&quot;)</span>
+            }
+<span class="nc" id="L74">        }</span>
+
+<span class="nc bnc" id="L76" title="All 4 branches missed.">        get(&quot;/module/{moduleCode}&quot;) {</span>
+            //ToDo change this to pull from ModuleDao, should be faster. Need to tight up Module creation.
+<span class="nc" id="L78">            val moduleCode = call.parameters[&quot;moduleCode&quot;]</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (moduleCode != null) {</span>
+<span class="nc" id="L80">                val response = StudentUserDaoInstance.getAllStudentUsersInModule(moduleCode)</span>
+<span class="nc bnc" id="L81" title="All 6 branches missed.">                if (!response.isNullOrEmpty())</span>
+<span class="nc" id="L82">                    call.respond(response)</span>
+<span class="nc" id="L83">                else call.respond(&quot;No students for that module found!&quot;)</span>
+            }
+<span class="nc" id="L85">        }</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">        get(&quot;/week-timetable/{studentId}&quot;) {</span>
+            //ToDO move to lecture route?
+<span class="nc" id="L88">            val lecturesThisWeek: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc" id="L89">            val studentId  = call.parameters[&quot;studentId&quot;]</span>
+<span class="nc" id="L90">            val studentUser = StudentUserDaoInstance.getStudentUser(studentId!!)</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (module in studentUser!!.moduleCodes) {</span>
+<span class="nc" id="L92">                val lectureList = LectureDaoInstance.getAllModuleLectures(module)</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                for (lecture in lectureList) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                    if (lecture.date.weekOfWeekyear().get() == DateTime.now().weekOfWeekyear().get()) {</span>
+<span class="nc" id="L95">                        lecturesThisWeek.add(lecture)</span>
+                    }
+                }
+            }
+<span class="nc bnc" id="L99" title="All 4 branches missed.">            if (!lecturesThisWeek.isNullOrEmpty())</span>
+<span class="nc" id="L100">                call.respond(lecturesThisWeek)</span>
+<span class="nc" id="L101">            else call.respond(&quot;No lectures found&quot;)</span>
+
+<span class="nc" id="L103">        }</span>
+
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        get(&quot;/future-timetable/{studentId}&quot;) {</span>
+<span class="nc" id="L106">            val futureLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc" id="L107">            val studentId  = call.parameters[&quot;studentId&quot;]</span>
+<span class="nc" id="L108">            val studentUser = StudentUserDaoInstance.getStudentUser(studentId!!)</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            for (module in studentUser!!.moduleCodes) {</span>
+<span class="nc" id="L110">                val lectureList = LectureDaoInstance.getAllModuleLectures(module)</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                for (lecture in lectureList) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                    if (lecture.date.isAfterNow) {</span>
+<span class="nc" id="L113">                        futureLectures.add(lecture)</span>
+                    }
+                }
+            }
+<span class="nc bnc" id="L117" title="All 4 branches missed.">            if (!futureLectures.isNullOrEmpty())</span>
+<span class="nc" id="L118">                call.respond(futureLectures)</span>
+<span class="nc" id="L119">            else call.respond(&quot;No lectures found&quot;)</span>
+
+<span class="nc" id="L121">        }</span>
+
+<span class="nc bnc" id="L123" title="All 4 branches missed.">        get(&quot;/complete-timetable/{studentId}&quot;) {</span>
+<span class="nc" id="L124">            val allLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc" id="L125">            val studentId  = call.parameters[&quot;studentId&quot;]</span>
+<span class="nc" id="L126">            val studentUser = StudentUserDaoInstance.getStudentUser(studentId!!)</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            for (module in studentUser!!.moduleCodes) {</span>
+<span class="nc" id="L128">                val lectureList = LectureDaoInstance.getAllModuleLectures(module)</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                for (lecture in lectureList) {</span>
+<span class="nc" id="L130">                    allLectures.add(lecture)</span>
+                }
+            }
+<span class="nc bnc" id="L133" title="All 4 branches missed.">            if (!allLectures.isNullOrEmpty())</span>
+<span class="nc" id="L134">                call.respond(allLectures)</span>
+<span class="nc" id="L135">            else call.respond(&quot;No lectures found&quot;)</span>
+<span class="nc" id="L136">        }</span>
+<span class="nc" id="L137">    }</span>
+<span class="nc" id="L138">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

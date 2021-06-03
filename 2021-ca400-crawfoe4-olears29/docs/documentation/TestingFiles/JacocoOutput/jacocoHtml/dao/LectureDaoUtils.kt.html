@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LectureDaoUtils.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">LectureDaoUtils.kt</span></div><h1>LectureDaoUtils.kt</h1><pre class="source lang-java linenums">package dao
+
+import LectureDaoInstance
+import dataClasses.Lecture
+import java.util.*
+
+object LectureDaoUtils {
+    fun attendanceToList(studentIds : String): List&lt;String&gt; {
+<span class="nc bnc" id="L9" title="All 2 branches missed.">        return studentIds.split(&quot;,&quot;).map { it.trim() }</span>
+    }
+
+    fun attendanceToString(studentIds: List&lt;String&gt;) : String {
+<span class="nc" id="L13">        print(&quot;DEBUG:&quot; + studentIds.toString().drop(1).dropLast(1))</span>
+<span class="nc" id="L14">        return studentIds.toString().drop(1).dropLast(1)</span>
+    }
+
+    fun regStudentForLecture(uuid: UUID, studentId: String) {
+<span class="nc" id="L18">        val lecture = LectureDaoInstance.getLecture(uuid)</span>
+<span class="nc" id="L19">        val mutableList: MutableList&lt;String&gt; = mutableListOf()</span>
+<span class="nc bnc" id="L20" title="All 6 branches missed.">        if (lecture?.actualAttendance?.size!! &gt; 0) lecture.actualAttendance.forEach { student_id -&gt;</span>
+<span class="nc" id="L21">            mutableList.add(student_id)</span>
+<span class="nc" id="L22">        }</span>
+<span class="nc bnc" id="L23" title="All 4 branches missed.">        if (lecture.expectedAttendance.contains(studentId) &amp;&amp; !lecture.actualAttendance.contains(studentId)) {</span>
+<span class="nc" id="L24">            mutableList.add(studentId)</span>
+<span class="nc" id="L25">            LectureDaoInstance.updateLectureAttendance(uuid, mutableList)</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        } else if (lecture.actualAttendance.contains(studentId)) {</span>
+<span class="nc" id="L27">            throw Exception(&quot;User is already marked as attending&quot;)</span>
+        } else {
+<span class="nc" id="L29">            throw Exception(&quot;User is not registered for module&quot;)</span>
+        }
+<span class="nc" id="L31">    }</span>
+
+    fun returnLecturesAfterNow(lectureList : List&lt;Lecture&gt;): List&lt;Lecture&gt; {
+<span class="nc" id="L34">        val futureLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (lecture in lectureList) {</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (lecture.date.isAfterNow) {</span>
+<span class="nc" id="L37">                futureLectures.add(lecture)</span>
+            }
+        }
+<span class="nc" id="L40">        return futureLectures</span>
+    }
+
+    fun getNextLecture(lectureList :List&lt;Lecture&gt;): Lecture? {
+<span class="nc" id="L44">        val futureLectures = returnLecturesAfterNow(lectureList)</span>
+<span class="nc bnc" id="L45" title="All 6 branches missed.">        return if (!futureLectures.isNullOrEmpty()) {</span>
+<span class="nc" id="L46">            var nextLecture = futureLectures[0]</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            for (lecture in futureLectures) {</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">                if (lecture.date.isAfterNow) {</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                    if (lecture.date.isBefore(nextLecture.date)) {</span>
+<span class="nc" id="L50">                        nextLecture = lecture</span>
+                    }
+                }
+            }
+<span class="nc" id="L54">            nextLecture</span>
+        } else {
+<span class="nc" id="L56">            null</span>
+        }
+    }
+
+    fun bookingClashChecker(lecture : Lecture): List&lt;Lecture&gt; {
+<span class="nc" id="L61">        val clashingLectures = mutableListOf&lt;Lecture&gt;()</span>
+<span class="nc" id="L62">        val otherLectures = LectureDaoInstance.getAllLecturesAtLocation(lecture.location)</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        for (otherLecture in otherLectures) {</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">            if (!((lecture.date.isBefore(otherLecture.date) &amp;&amp; lecture.endTime.isBefore(otherLecture.date))</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">                        || (lecture.date.isAfter(otherLecture.endTime) &amp;&amp; lecture.endTime.isAfter(otherLecture.endTime)))) {</span>
+<span class="nc" id="L66">                clashingLectures.add(otherLecture)</span>
+            }
+        }
+<span class="nc" id="L69">        return clashingLectures</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

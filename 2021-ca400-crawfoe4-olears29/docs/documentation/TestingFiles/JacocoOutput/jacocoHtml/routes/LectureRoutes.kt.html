@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LectureRoutes.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">routes</a> &gt; <span class="el_source">LectureRoutes.kt</span></div><h1>LectureRoutes.kt</h1><pre class="source lang-java linenums">package routes
+
+import LectureDaoInstance
+import daoUtils.LectureDaoUtils.bookingClashChecker
+import daoUtils.LectureDaoUtils.regStudentForLecture
+import dataClasses.Lecture
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import org.joda.time.DateTime
+import requestObjects.LecturePutRequest
+import requestObjects.LectureRequest
+import requestObjects.toLectureObject
+import java.util.*
+
+fun Route.lectureRouting() {
+<span class="nc" id="L19">    route(&quot;/lecture&quot;) {</span>
+<span class="nc bnc" id="L20" title="All 3 branches missed.">        get {</span>
+<span class="nc" id="L21">            call.respond(mapOf(&quot;lecture&quot; to LectureDaoInstance.getAllLectures()))</span>
+<span class="nc" id="L22">        }</span>
+<span class="nc bnc" id="L23" title="All 5 branches missed.">        post {</span>
+<span class="nc" id="L24">            try {</span>
+                //ToDo add check that module exists in the module table
+<span class="nc" id="L26">                val lecture = call.receive&lt;LectureRequest&gt;()</span>
+<span class="nc" id="L27">                val lectureObject = lecture.toLectureObject()</span>
+<span class="nc" id="L28">                val clashingLectures = bookingClashChecker(lectureObject)</span>
+
+<span class="nc bnc" id="L30" title="All 4 branches missed.">                if (clashingLectures.isNotEmpty()) {</span>
+<span class="nc" id="L31">                    call.respond(HttpStatusCode.BadRequest, clashingLectures)</span>
+                } else {
+<span class="nc" id="L33">                    LectureDaoInstance.createLecture(lectureObject)</span>
+<span class="nc" id="L34">                    call.respond(200)</span>
+                }
+<span class="nc" id="L36">            } catch (e: Exception) {</span>
+<span class="nc" id="L37">                print(e)</span>
+            }
+<span class="nc" id="L39">        }</span>
+<span class="nc bnc" id="L40" title="All 5 branches missed.">        put {</span>
+<span class="nc" id="L41">            try {</span>
+<span class="nc" id="L42">                val lecture = call.receive&lt;LecturePutRequest&gt;().toLectureObject()</span>
+<span class="nc" id="L43">                val clashingLectures = bookingClashChecker(lecture)</span>
+
+<span class="nc bnc" id="L45" title="All 4 branches missed.">                if (clashingLectures.isNotEmpty()) {</span>
+<span class="nc" id="L46">                    call.respond(HttpStatusCode.BadRequest, clashingLectures)</span>
+                } else {
+<span class="nc" id="L48">                    LectureDaoInstance.updateLecture(lecture)</span>
+<span class="nc" id="L49">                    call.respond(200)</span>
+                }
+<span class="nc" id="L51">            } catch (e: Exception) {</span>
+<span class="nc" id="L52">                print(e)</span>
+            }
+<span class="nc" id="L54">        }</span>
+<span class="nc bnc" id="L55" title="All 3 branches missed.">        delete(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L56">            val strUuid: String? = call.parameters[&quot;uuid&quot;]</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (strUuid != null) {</span>
+<span class="nc" id="L58">                val uuid: UUID = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc" id="L59">                LectureDaoInstance.deleteLecture(uuid)</span>
+<span class="nc" id="L60">                call.respond(200)</span>
+
+            }
+<span class="nc" id="L63">        }</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">        get(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L65">            val uuid = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (uuid != null) {</span>
+<span class="nc" id="L67">                val response = LectureDaoInstance.getLecture(uuid)</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L69">                    call.respond(response)</span>
+<span class="nc" id="L70">                else call.respond(&quot;No lectures found for uuid&quot;)</span>
+            }
+<span class="nc" id="L72">        }</span>
+<span class="nc bnc" id="L73" title="All 4 branches missed.">        get(&quot;/module/{module_code}&quot;) {</span>
+<span class="nc" id="L74">            val moduleCode = call.parameters[&quot;module_code&quot;]</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (moduleCode != null) {</span>
+<span class="nc" id="L76">                val response = LectureDaoInstance.getAllModuleLectures(moduleCode)</span>
+<span class="nc bnc" id="L77" title="All 6 branches missed.">                if (!response.isNullOrEmpty())</span>
+<span class="nc" id="L78">                    call.respond(response)</span>
+<span class="nc" id="L79">                else call.respond(&quot;No lectures found for module code&quot;)</span>
+            }
+<span class="nc" id="L81">        }</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">        get(&quot;/module/{module_code}/{date}&quot;) {</span>
+<span class="nc" id="L83">            val moduleCode = call.parameters[&quot;module_code&quot;]</span>
+<span class="nc" id="L84">            val date : DateTime = DateTime.parse(call.parameters[&quot;date&quot;])</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (moduleCode != null) {</span>
+<span class="nc" id="L86">                val allLectures = LectureDaoInstance.getAllModuleLectures(moduleCode)</span>
+<span class="nc bnc" id="L87" title="All 6 branches missed.">                if (!allLectures.isNullOrEmpty()) {</span>
+<span class="nc" id="L88">                    val weeksLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                    for (lecture in allLectures) {</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                        if (lecture.date.weekOfWeekyear().get() == date.weekOfWeekyear().get()) {</span>
+<span class="nc" id="L91">                            weeksLectures.add(lecture)</span>
+                        }
+                    }
+<span class="nc" id="L94">                    call.respond(weeksLectures)</span>
+                }
+<span class="nc" id="L96">                else call.respond(&quot;No lectures found for module code during the week given&quot;)</span>
+            }
+<span class="nc" id="L98">        }</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">        get(&quot;/course/{course_code}&quot;) {</span>
+<span class="nc" id="L100">            val courseCode = call.parameters[&quot;course_code&quot;]</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (courseCode != null) {</span>
+<span class="nc" id="L102">                val response = LectureDaoInstance.getAllCourseLectures(courseCode)</span>
+<span class="nc bnc" id="L103" title="All 6 branches missed.">                if (!response.isNullOrEmpty())</span>
+<span class="nc" id="L104">                    call.respond(response)</span>
+<span class="nc" id="L105">                else call.respond(&quot;No lectures found for course code&quot;)</span>
+            }
+<span class="nc" id="L107">        }</span>
+<span class="nc bnc" id="L108" title="All 4 branches missed.">        get(&quot;/course/{course_code}/{date}&quot;) {</span>
+<span class="nc" id="L109">            val courseCode = call.parameters[&quot;course_code&quot;]</span>
+<span class="nc" id="L110">            val date : DateTime = DateTime.parse(call.parameters[&quot;date&quot;])</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (courseCode != null) {</span>
+<span class="nc" id="L112">                val allLectures = LectureDaoInstance.getAllCourseLectures(courseCode)</span>
+<span class="nc bnc" id="L113" title="All 6 branches missed.">                if (!allLectures.isNullOrEmpty()) {</span>
+<span class="nc" id="L114">                    val weeksLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                    for (lecture in allLectures) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                        if (lecture.date.weekOfWeekyear().get() == date.weekOfWeekyear().get()) {</span>
+<span class="nc" id="L117">                            weeksLectures.add(lecture)</span>
+                        }
+                    }
+<span class="nc" id="L120">                    call.respond(weeksLectures)</span>
+                }
+<span class="nc" id="L122">                else call.respond(&quot;No lectures found for course code during the week given&quot;)</span>
+            }
+<span class="nc" id="L124">        }</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">        get(&quot;/next-module/{module_code}&quot;) {</span>
+<span class="nc" id="L126">            val moduleCode = call.parameters[&quot;module_code&quot;]</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            if (moduleCode != null) {</span>
+<span class="nc" id="L128">                val response = LectureDaoInstance.getNextLectureForModule(moduleCode)</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L130">                    call.respond(response)</span>
+<span class="nc" id="L131">                else call.respond(&quot;No new upcoming lectures found for moduleCode&quot;)</span>
+            }
+<span class="nc" id="L133">        }</span>
+<span class="nc bnc" id="L134" title="All 4 branches missed.">        get(&quot;/next-course/{course_code}&quot;) {</span>
+<span class="nc" id="L135">            val courseCode = call.parameters[&quot;course_code&quot;]</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (courseCode != null) {</span>
+<span class="nc" id="L137">                val response = LectureDaoInstance.getNextLectureForCourse(courseCode)</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L139">                    call.respond(response)</span>
+<span class="nc" id="L140">                else call.respond(&quot;No new upcoming lectures found for courseCode&quot;)</span>
+            }
+<span class="nc" id="L142">        }</span>
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        get(&quot;/location/{location}&quot;) {</span>
+<span class="nc" id="L144">            val location = call.parameters[&quot;location&quot;]</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (location != null) {</span>
+<span class="nc" id="L146">                val response = LectureDaoInstance.getAllLecturesAtLocation(location)</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L148">                    call.respond(response)</span>
+<span class="nc" id="L149">                else call.respond(&quot;No lectures found for this location&quot;)</span>
+            }
+<span class="nc" id="L151">        }</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">        get(&quot;/location/{location}/{date}&quot;) {</span>
+<span class="nc" id="L153">            val location = call.parameters[&quot;location&quot;]</span>
+<span class="nc" id="L154">            val date : DateTime = DateTime.parse(call.parameters[&quot;date&quot;])</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (location != null) {</span>
+<span class="nc" id="L156">                val allLectures = LectureDaoInstance.getAllLecturesAtLocation(location)</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">                if (allLectures != null) {</span>
+<span class="nc" id="L158">                    val weeksLectures: MutableList&lt;Lecture&gt; = mutableListOf()</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                    for (lecture in allLectures) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                        if (lecture.date.weekOfWeekyear().get() == date.weekOfWeekyear().get()) {</span>
+<span class="nc" id="L161">                            weeksLectures.add(lecture)</span>
+                        }
+                    }
+<span class="nc" id="L164">                    call.respond(weeksLectures)</span>
+                }
+<span class="nc" id="L166">                else call.respond(&quot;No lectures found for this location at provided time&quot;)</span>
+            }
+<span class="nc" id="L168">        }</span>
+<span class="nc bnc" id="L169" title="All 4 branches missed.">        get(&quot;/reg-device/{location}&quot;) {</span>
+<span class="nc" id="L170">            val location = call.parameters[&quot;location&quot;]</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (location != null) {</span>
+<span class="nc" id="L172">                val response = LectureDaoInstance.getLectureWithLocationAtNow(location)</span>
+<span class="nc bnc" id="L173" title="All 6 branches missed.">                if (!response.isNullOrEmpty()) {</span>
+<span class="nc" id="L174">                    call.respond(response)</span>
+                } else {
+<span class="nc" id="L176">                    call.respond(&quot;No lectures found for this location at current time&quot;)</span>
+                }
+            }
+<span class="nc" id="L179">        }</span>
+
+<span class="nc bnc" id="L181" title="All 5 branches missed.">        get(&quot;/reg-user/{uuid}/{student-id}&quot;) {</span>
+<span class="nc" id="L182">            val uuid = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc" id="L183">            val studentId = call.parameters[&quot;student-id&quot;]</span>
+<span class="nc bnc" id="L184" title="All 4 branches missed.">            if (uuid != null &amp;&amp; studentId != null) {</span>
+<span class="nc" id="L185">                try {</span>
+<span class="nc" id="L186">                    regStudentForLecture(uuid, studentId)</span>
+<span class="nc" id="L187">                    call.respond(200)</span>
+<span class="nc" id="L188">                } catch (e:Exception) {</span>
+<span class="nc" id="L189">                    call.respond(HttpStatusCode.BadRequest, e.message.toString())</span>
+                }
+            } else {
+<span class="nc" id="L192">                call.respond(404)</span>
+            }
+
+<span class="nc" id="L195">        }</span>
+<span class="nc" id="L196">    }</span>
+<span class="nc" id="L197">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

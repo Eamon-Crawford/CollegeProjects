@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentUserDao.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">StudentUserDao.kt</span></div><h1>StudentUserDao.kt</h1><pre class="source lang-java linenums">package dao
+
+import daoUtils.LectureDaoUtils.listToString
+import daoUtils.LectureDaoUtils.stringToList
+import daoUtils.StudentUserDaoUtils.studentsInModule
+import dataClasses.StudentUser
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import table.StudentUsersTable
+import java.io.Closeable
+import java.util.*
+
+
+<span class="fc" id="L14">class StudentUserDao(private val db: Database) : StudentUserDAOInterface {</span>
+
+<span class="fc" id="L16">    override fun init() = transaction(db) {</span>
+<span class="fc" id="L17">        SchemaUtils.create(StudentUsersTable)</span>
+<span class="fc" id="L18">    }</span>
+
+<span class="fc" id="L20">    override fun createStudentUser(studentUser : StudentUser) = transaction(db){</span>
+<span class="fc" id="L21">        val moduleCodesString = listToString(studentUser.moduleCodes)// kotlin exposed doesn't support array types even though postgresql does, removing [ ] from string</span>
+<span class="fc" id="L22">        StudentUsersTable.insert {</span>
+<span class="fc" id="L23">            it[uuid] = studentUser.uuid</span>
+<span class="fc" id="L24">            it[firstName] = studentUser.firstName</span>
+<span class="fc" id="L25">            it[lastName] = studentUser.lastName</span>
+<span class="fc" id="L26">            it[studentId] = studentUser.studentId</span>
+<span class="fc" id="L27">            it[courseCode] = studentUser.courseCode</span>
+<span class="fc" id="L28">            it[moduleCodes] = moduleCodesString</span>
+<span class="fc" id="L29">        }</span>
+<span class="fc" id="L30">        Unit</span>
+<span class="fc" id="L31">    }</span>
+
+<span class="fc" id="L33">    override fun updateStudentUser(studentUser: StudentUser) = transaction(db){</span>
+<span class="fc" id="L34">        val moduleCodesString = listToString(studentUser.moduleCodes)// kotlin exposed doesn't support array types even though postgresql does, removing [ ] from string</span>
+<span class="fc" id="L35">        StudentUsersTable.update({ StudentUsersTable.uuid eq studentUser.uuid }) {</span>
+<span class="fc" id="L36">            it[firstName] = studentUser.firstName</span>
+<span class="fc" id="L37">            it[lastName] = studentUser.lastName</span>
+<span class="fc" id="L38">            it[studentId] = studentUser.studentId</span>
+<span class="fc" id="L39">            it[courseCode] = studentUser.courseCode</span>
+<span class="fc" id="L40">            it[moduleCodes] = moduleCodesString</span>
+<span class="fc" id="L41">        }</span>
+<span class="fc" id="L42">        Unit</span>
+<span class="fc" id="L43">    }</span>
+
+<span class="fc" id="L45">    override fun deleteStudentUser(uuid: UUID) = transaction(db){</span>
+<span class="fc" id="L46">        StudentUsersTable.deleteWhere { StudentUsersTable.uuid eq uuid }</span>
+<span class="fc" id="L47">        Unit</span>
+<span class="fc" id="L48">    }</span>
+
+<span class="fc" id="L50">    override fun getStudentUser(uuid: UUID): StudentUser? = transaction(db){</span>
+<span class="fc" id="L51">        StudentUsersTable.select { StudentUsersTable.uuid eq uuid }.map{</span>
+<span class="fc" id="L52">            StudentUser(</span>
+<span class="fc" id="L53">                    it[StudentUsersTable.uuid],</span>
+<span class="fc" id="L54">                    it[StudentUsersTable.firstName],</span>
+<span class="fc" id="L55">                    it[StudentUsersTable.lastName],</span>
+<span class="fc" id="L56">                    it[StudentUsersTable.studentId],</span>
+<span class="fc" id="L57">                    it[StudentUsersTable.courseCode],</span>
+<span class="fc" id="L58">                    stringToList(it[StudentUsersTable.moduleCodes]), // kotlin exposed doesnt support array types even though postgresql does, using a string that we will split instead</span>
+            )
+<span class="fc" id="L60">        }.singleOrNull()</span>
+<span class="fc" id="L61">    }</span>
+
+<span class="fc" id="L63">    override fun getStudentUser(studentId : String): StudentUser? = transaction(db){</span>
+<span class="fc" id="L64">        StudentUsersTable.select { StudentUsersTable.studentId eq studentId }.map{</span>
+<span class="fc" id="L65">            StudentUser(</span>
+<span class="fc" id="L66">                    it[StudentUsersTable.uuid],</span>
+<span class="fc" id="L67">                    it[StudentUsersTable.firstName],</span>
+<span class="fc" id="L68">                    it[StudentUsersTable.lastName],</span>
+<span class="fc" id="L69">                    it[StudentUsersTable.studentId],</span>
+<span class="fc" id="L70">                    it[StudentUsersTable.courseCode],</span>
+<span class="fc" id="L71">                    stringToList(it[StudentUsersTable.moduleCodes]), // kotlin exposed doesnt support array types even though postgresql does, using a string that we will split instead</span>
+            )
+<span class="fc" id="L73">        }.singleOrNull()</span>
+<span class="fc" id="L74">    }</span>
+
+<span class="fc" id="L76">    override fun getNumberOfStudentUsersInModule(moduleCode: String): Int = transaction(db){</span>
+<span class="fc" id="L77">        val studentUserList = StudentUsersTable.selectAll().map{</span>
+<span class="fc" id="L78">            StudentUser(</span>
+<span class="fc" id="L79">                    it[StudentUsersTable.uuid],</span>
+<span class="fc" id="L80">                    it[StudentUsersTable.firstName],</span>
+<span class="fc" id="L81">                    it[StudentUsersTable.lastName],</span>
+<span class="fc" id="L82">                    it[StudentUsersTable.studentId],</span>
+<span class="fc" id="L83">                    it[StudentUsersTable.courseCode],</span>
+<span class="fc" id="L84">                    stringToList(it[StudentUsersTable.moduleCodes]), // kotlin exposed doesn't support array types even though postgresql does, using a string that we will split instead</span>
+            )
+<span class="fc" id="L86">        }.toList()</span>
+
+<span class="fc" id="L88">        return@transaction studentsInModule(moduleCode, studentUserList).size</span>
+<span class="fc" id="L89">    }</span>
+
+<span class="fc" id="L91">    override fun getAllStudentUsersInModule(moduleCode: String): List&lt;StudentUser&gt; = transaction(db){</span>
+<span class="fc" id="L92">        val studentUserList = StudentUsersTable.selectAll().map{</span>
+<span class="fc" id="L93">            StudentUser(</span>
+<span class="fc" id="L94">                    it[StudentUsersTable.uuid],</span>
+<span class="fc" id="L95">                    it[StudentUsersTable.firstName],</span>
+<span class="fc" id="L96">                    it[StudentUsersTable.lastName],</span>
+<span class="fc" id="L97">                    it[StudentUsersTable.studentId],</span>
+<span class="fc" id="L98">                    it[StudentUsersTable.courseCode],</span>
+<span class="fc" id="L99">                    stringToList(it[StudentUsersTable.moduleCodes]), // kotlin exposed doesn't support array types even though postgresql does, using a string that we will split instead</span>
+            )
+<span class="fc" id="L101">        }.toList()</span>
+
+<span class="fc" id="L103">        return@transaction studentsInModule(moduleCode, studentUserList)</span>
+<span class="fc" id="L104">    }</span>
+
+<span class="fc" id="L106">    override fun getAllStudentUsers(): List&lt;StudentUser&gt; = transaction(db){</span>
+<span class="fc" id="L107">        StudentUsersTable.selectAll().map {</span>
+<span class="fc" id="L108">            StudentUser(</span>
+<span class="fc" id="L109">                it[StudentUsersTable.uuid],</span>
+<span class="fc" id="L110">                it[StudentUsersTable.firstName],</span>
+<span class="fc" id="L111">                it[StudentUsersTable.lastName],</span>
+<span class="fc" id="L112">                it[StudentUsersTable.studentId],</span>
+<span class="fc" id="L113">                it[StudentUsersTable.courseCode],</span>
+<span class="fc" id="L114">                stringToList(it[StudentUsersTable.moduleCodes]), // kotlin exposed doesn't support array types even though postgresql does, using a string that we will split instead</span>
+            )
+<span class="fc" id="L116">        }.toList()</span>
+<span class="fc" id="L117">    }</span>
+
+<span class="fc" id="L119">    override fun addModuleToStudent(module: String, uuid: UUID) = transaction(db){</span>
+<span class="fc" id="L120">        val student = getStudentUser(uuid)</span>
+<span class="pc bpc" id="L121" title="2 of 4 branches missed.">        val mutableList: MutableList&lt;String&gt; = student?.moduleCodes as MutableList&lt;String&gt;</span>
+<span class="fc" id="L122">        mutableList.add(module)</span>
+<span class="fc" id="L123">        val moduleCodesString = listToString(mutableList)</span>
+<span class="fc" id="L124">        StudentUsersTable.update({ StudentUsersTable.uuid eq uuid }) {</span>
+<span class="fc" id="L125">            it[moduleCodes] = moduleCodesString</span>
+<span class="fc" id="L126">        }</span>
+<span class="fc" id="L127">        Unit</span>
+<span class="fc" id="L128">    }</span>
+
+<span class="nc" id="L130">    override fun close() {}</span>
+}
+
+interface StudentUserDAOInterface : Closeable {
+    fun init()
+    fun createStudentUser(studentUser: StudentUser)
+    fun updateStudentUser(studentUser: StudentUser)
+    fun deleteStudentUser(uuid: UUID)
+    fun getStudentUser(uuid: UUID) : StudentUser?
+    fun getStudentUser(studentId: String) : StudentUser?
+    fun getNumberOfStudentUsersInModule(moduleCode: String) : Int
+    fun getAllStudentUsersInModule(moduleCode: String) : List&lt;StudentUser&gt;
+    fun getAllStudentUsers() : List&lt;StudentUser&gt;
+    fun addModuleToStudent(module: String, uuid: UUID)
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

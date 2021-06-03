@@ -1,0 +1,763 @@
+{
+	"info": {
+		"_postman_id": "7cdfe67f-3560-4b1c-9ec2-28c88246743e",
+		"name": "NFCDCU Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Student User Routes",
+			"item": [
+				{
+					"name": "Get a student User from student ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/student/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"student",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Student User from UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/13560a20-adb3-4dcb-b0d2-ff04e0f1d3e3",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"13560a20-adb3-4dcb-b0d2-ff04e0f1d3e3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new student user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Tom\",\r\n    \"lastName\": \"Test\",\r\n    \"studentId\": \"87654321\",\r\n    \"courseCode\": \"CASE4\",\r\n    \"moduleCodes\": [\r\n        \"CA4004\",\r\n        \"CA4002\",\r\n        \"CA4003\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a student user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uuid\": \"63081190-e702-4004-b6b1-41c86aaa5dca\",\r\n    \"firstName\": \"Tommy\",\r\n    \"lastName\": \"Fury\",\r\n    \"studentId\": \"12345678\",\r\n    \"courseCode\": \"CASE1\",\r\n    \"moduleCodes\": [\r\n        \"CA1001\",\r\n        \"CA1002\",\r\n        \"CA1003\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a student user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/63081190-e702-4004-b6b1-41c86aaa5dca",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"63081190-e702-4004-b6b1-41c86aaa5dca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Student users In Module",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/module/CA4004",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"module",
+								"CA4004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets a students lectures for the current week",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/week-timetable/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"week-timetable",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets all lectures for a given student ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/complete-timetable/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"complete-timetable",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets all future lectures for a given student",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/users/future-timetable/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"users",
+								"future-timetable",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lecture Routes",
+			"item": [
+				{
+					"name": "Gets all lectures",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new lecture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"courseCode\": \"CASE4\",\r\n    \"moduleCode\": \"CA4004\",\r\n    \"date\": \"2021-05-04T17:00:00.000\",\r\n    \"endTime\": \"2021-05-04T18:00:00.000\",\r\n    \"location\": \"GLA.L103\",\r\n    \"type\": \"lab\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a lecture in the db",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uuid\": \"fabbba55-73a6-4ea3-a6d2-ac6837e8cc2a\",\r\n    \"courseCode\": \"EL1\",\r\n    \"moduleCode\": \"EL1001\",\r\n    \"date\": \"2021-04-28T09:00:00.000\",\r\n    \"endTime\": \"2021-04-28T10:00:00.000\",\r\n    \"location\": \"SPD.C206\",\r\n    \"type\": \"lab\",\r\n    \"expectedAttendanceNumber\": 100,\r\n    \"actualAttendanceNumber\": 50,\r\n    \"expectedAttendance\": [\r\n        \"12345678\",\r\n        \"87654321\"\r\n    ],\r\n    \"actualAttendance\": [\r\n        \"12345678\",\r\n        \"87654321\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletes a lecture in the DB based on uuid",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/07225fcf-29e8-4b4b-886d-9a02e36b0516",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"07225fcf-29e8-4b4b-886d-9a02e36b0516"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets a lecture from the db based on uuid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/8851701f-fbc5-4823-bf60-efda5159006f",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"8851701f-fbc5-4823-bf60-efda5159006f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets all lectures for a module, past and future",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/module/CA4004",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"module",
+								"CA4004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets the lectures for a module, that happen during the week of time given",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/module/CA1002/2021-04-28T09:00:00.000Z",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"module",
+								"CA1002",
+								"2021-04-28T09:00:00.000Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets all lecture for given course",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/course/CASE1",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"course",
+								"CASE1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets lectures for a given course, on a week given by date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/course/CASE1/2021-04-18T09:00:00.000Z",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"course",
+								"CASE1",
+								"2021-04-18T09:00:00.000Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets the next lecture for a module",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/next-module/CA1002",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"next-module",
+								"CA1002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets the next lecture for a course",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/next-course/CASE1",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"next-course",
+								"CASE1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets all lectures at location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/location/SPD.C206",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"location",
+								"SPD.C206"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets lectures at location, on the week of given date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/location/SPD.C206/2021-12-01T09:00:00.000Z",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"location",
+								"SPD.C206",
+								"2021-12-01T09:00:00.000Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets possible lecture uuid for nfc reader",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/reg-device/GLA.L107",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"reg-device",
+								"GLA.L107"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marks a student as having attended a lecture, used by the nfc reader",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/lecture/reg-user/546751da-5c8c-4b0b-9f5c-d88014eef920/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"lecture",
+								"reg-user",
+								"546751da-5c8c-4b0b-9f5c-d88014eef920",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Module Routes",
+			"item": [
+				{
+					"name": "Gets all modules in DB",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creates a new module in the DB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"moduleCode\": \"CA4004\",\r\n    \"moduleTitle\": \"Processes\",\r\n    \"regStudentIds\": [\r\n        \"17348912\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updates a module in the DB",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uuid\": \"9b4f0086-158b-4b57-b08d-ac83524b74e7\",\r\n    \"moduleCode\": \"CA103\",\r\n    \"moduleTitle\": \"Computer Systemss\",\r\n    \"regStudentIds\": [\r\n        \"12345678\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletes a Module from the DB",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules/9b4f0086-158b-4b57-b08d-ac83524b74e7",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules",
+								"9b4f0086-158b-4b57-b08d-ac83524b74e7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets a specific module from the DB, matches by uuid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules/9b4f0086-158b-4b57-b08d-ac83524b74e7",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules",
+								"9b4f0086-158b-4b57-b08d-ac83524b74e7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gets a module from the db by module code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules/module-code/CA103",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules",
+								"module-code",
+								"CA103"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adds a student to a module by code and student number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://590dbdfa30e3.ngrok.io/modules/register/CA103/12345678",
+							"protocol": "https",
+							"host": [
+								"590dbdfa30e3",
+								"ngrok",
+								"io"
+							],
+							"path": [
+								"modules",
+								"register",
+								"CA103",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

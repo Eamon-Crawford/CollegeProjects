@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="daoTests.ModuleDaoTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2021-05-06T14:31:50" hostname="DESKTOP-5QF4TQS" time="1.115">
+  <properties/>
+  <testcase name="Create a module, get it by module code and del it()" classname="daoTests.ModuleDaoTest" time="0.184"/>
+  <testcase name="Register student for module Failure module null()" classname="daoTests.ModuleDaoTest" time="0.04"/>
+  <testcase name="Create a module, update it, get it and del it()" classname="daoTests.ModuleDaoTest" time="0.177"/>
+  <testcase name="Register student for module Failure already registered()" classname="daoTests.ModuleDaoTest" time="0.116"/>
+  <testcase name="Create two modules, get them and del them()" classname="daoTests.ModuleDaoTest" time="0.196"/>
+  <testcase name="Create a module, get it and del it()" classname="daoTests.ModuleDaoTest" time="0.113"/>
+  <testcase name="Register student for module Successfully()" classname="daoTests.ModuleDaoTest" time="0.286"/>
+  <system-out><![CDATA[DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.405 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+2021-05-06 15:31:50.452 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".module_code = 'CA4004'
+2021-05-06 15:31:50.497 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.540 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.572 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".module_code = 'NotARealCode'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.612 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+2021-05-06 15:31:50.641 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.673 [Test worker] DEBUG Exposed - UPDATE "module" SET module_code='CA4003', module_title='Compilers', reg_student_ids='11231231, 21231232, 31231233, 41231234', expected_attendance=4 WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.702 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.730 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.759 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.789 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+2021-05-06 15:31:50.818 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".module_code = 'CA4004'
+2021-05-06 15:31:50.845 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:50.875 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.904 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:50.932 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4005', 'Cryptography and Security Protocols', '11231231, 21231232, 31231233, 41231234', 'dd9dd294-b403-4f69-98af-6984705594ed')
+2021-05-06 15:31:50.961 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module"
+2021-05-06 15:31:50.989 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.017 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'dd9dd294-b403-4f69-98af-6984705594ed'
+2021-05-06 15:31:51.045 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.072 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'dd9dd294-b403-4f69-98af-6984705594ed'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:51.101 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+2021-05-06 15:31:51.129 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.157 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.185 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+DEBUG:11231231, 21231232, 31231233, 412312342021-05-06 15:31:51.214 [Test worker] DEBUG Exposed - INSERT INTO "module" (expected_attendance, module_code, module_title, reg_student_ids, uuid) VALUES (4, 'CA4004', 'Soft. Eng.:Process,Principles & Methods', '11231231, 21231232, 31231233, 41231234', 'ee6ee294-b403-4f69-98af-6984705594ee')
+2021-05-06 15:31:51.243 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".module_code = 'CA4004'
+DEBUG:11231231, 21231232, 31231233, 41231234, 200200202021-05-06 15:31:51.246 [Test worker] DEBUG Exposed - UPDATE "module" SET module_code='CA4004', module_title='Soft. Eng.:Process,Principles & Methods', reg_student_ids='11231231, 21231232, 31231233, 41231234, 20020020', expected_attendance=5 WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.382 [Test worker] DEBUG Exposed - SELECT studentusers.uuid, studentusers.first_name, studentusers.last_name, studentusers.student_id, studentusers.course_code, studentusers.module_codes FROM studentusers WHERE studentusers.student_id = '20020020'
+2021-05-06 15:31:51.414 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".module_code = 'CA4004'
+2021-05-06 15:31:51.444 [Test worker] DEBUG Exposed - DELETE FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+2021-05-06 15:31:51.472 [Test worker] DEBUG Exposed - SELECT "module".uuid, "module".module_code, "module".module_title, "module".reg_student_ids, "module".expected_attendance FROM "module" WHERE "module".uuid = 'ee6ee294-b403-4f69-98af-6984705594ee'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

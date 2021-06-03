@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModuleRoutes.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">API</a> &gt; <a href="index.source.html" class="el_package">routes</a> &gt; <span class="el_source">ModuleRoutes.kt</span></div><h1>ModuleRoutes.kt</h1><pre class="source lang-java linenums">package routes
+
+import ModuleDaoInstance
+import daoUtils.StudentUserDaoUtils.addModuleToStudentUser
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import requestObjects.ModulePutRequest
+import requestObjects.ModuleRequest
+import requestObjects.toModuleObject
+import java.util.*
+
+fun Route.modulesRouting() {
+<span class="nc" id="L16">    route(&quot;/modules&quot;) {</span>
+<span class="nc bnc" id="L17" title="All 3 branches missed.">        get {</span>
+<span class="nc" id="L18">            call.respond(mapOf(&quot;modules&quot; to ModuleDaoInstance.getAllModules()))</span>
+<span class="nc" id="L19">        }</span>
+
+<span class="nc bnc" id="L21" title="All 4 branches missed.">        post {</span>
+<span class="nc" id="L22">            val moduleRequest = call.receive&lt;ModuleRequest&gt;()</span>
+<span class="nc" id="L23">            val moduleObject = moduleRequest.toModuleObject()</span>
+<span class="nc" id="L24">            ModuleDaoInstance.createModule(moduleObject)</span>
+<span class="nc" id="L25">            call.respond(200)</span>
+<span class="nc" id="L26">        }</span>
+
+<span class="nc bnc" id="L28" title="All 4 branches missed.">        put {</span>
+<span class="nc" id="L29">            val module = call.receive&lt;ModulePutRequest&gt;().toModuleObject()</span>
+<span class="nc" id="L30">            ModuleDaoInstance.updateModule(module)</span>
+<span class="nc" id="L31">            call.respond(200)</span>
+<span class="nc" id="L32">        }</span>
+
+<span class="nc bnc" id="L34" title="All 4 branches missed.">        delete(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L35">            val strUuid: String? = call.parameters[&quot;uuid&quot;]</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (strUuid != null) {</span>
+<span class="nc" id="L37">                val uuid: UUID = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc" id="L38">                ModuleDaoInstance.deleteModule(uuid)</span>
+<span class="nc" id="L39">                call.respond(200)</span>
+            } else {
+<span class="nc" id="L41">                call.respond(404)</span>
+            }
+<span class="nc" id="L43">        }</span>
+
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        get(&quot;/{uuid}&quot;) {</span>
+<span class="nc" id="L46">            val uuid = UUID.fromString(call.parameters[&quot;uuid&quot;])</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (uuid != null) {</span>
+<span class="nc" id="L48">                val response = ModuleDaoInstance.getModule(uuid)</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L50">                    call.respond(response)</span>
+<span class="nc" id="L51">                else call.respond(&quot;No such user found!&quot;)</span>
+            }
+<span class="nc" id="L53">        }</span>
+
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        get(&quot;/module-code/{moduleCode}&quot;) {</span>
+<span class="nc" id="L56">            val moduleCode  = call.parameters[&quot;moduleCode&quot;]</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (moduleCode != null) {</span>
+<span class="nc" id="L58">                val response = ModuleDaoInstance.getModule(moduleCode)</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (response != null)</span>
+<span class="nc" id="L60">                    call.respond(response)</span>
+<span class="nc" id="L61">                else call.respond(&quot;No such user found!&quot;)</span>
+            }
+<span class="nc" id="L63">        }</span>
+
+<span class="nc bnc" id="L65" title="All 5 branches missed.">        get(&quot;/register/{moduleCode}/{studentId}&quot;) {</span>
+<span class="nc" id="L66">            try {</span>
+<span class="nc" id="L67">                val moduleCode  = call.parameters[&quot;moduleCode&quot;]</span>
+<span class="nc" id="L68">                val studentId  = call.parameters[&quot;studentId&quot;]</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">                if (moduleCode != null &amp;&amp; studentId != null) {</span>
+<span class="nc" id="L70">                    val response = ModuleDaoInstance.regStudentForModule(moduleCode, studentId)</span>
+<span class="nc" id="L71">                    addModuleToStudentUser(studentId, moduleCode)</span>
+                    if (response != null)
+<span class="nc" id="L73">                        call.respond(response)</span>
+                    else call.respond(&quot;No such user found!&quot;)
+                }
+<span class="nc" id="L76">            } catch(e: Exception) {</span>
+<span class="nc" id="L77">                println(e)</span>
+<span class="nc" id="L78">                call.respond(HttpStatusCode.BadRequest, e.toString())</span>
+            }
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">    }</span>
+<span class="nc" id="L82">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
